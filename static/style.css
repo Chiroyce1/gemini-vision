@@ -1,0 +1,123 @@
+* {
+  font-weight: 100;
+  font-family: system-ui;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  color: white;
+}
+
+select {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  padding: 1em 2em;
+  border: 1px solid purple;
+  border-radius: 4px;
+  font-size: 1em;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+video {
+  border-radius: 4px;
+}
+
+.stuff {
+  margin: auto;
+  width: 70vw;
+}
+
+.stuff > h1 {
+  margin-bottom: 1.5em;
+  font-size: 3em;
+  font-weight: 100;
+  text-align: center;
+}
+
+textarea {
+  height: 250px;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5em;
+  border-radius: 3px;
+}
+
+.right {
+  width: 50%;
+  margin-left: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  cursor: pointer;
+  margin-top: 1em;
+  width: 100%;
+  padding: 1em 2em;
+  background-color: black;
+  color: white;
+  border: 1px solid purple;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.left {
+  width: 50%;
+  margin-left: 1.5em;
+}
+
+video {
+  max-width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+#response {
+  margin-bottom: 3em;
+}
+
+button:hover,
+select:hover {
+  background-color: purple;
+  transition: all 200ms;
+}
+
+@media only screen and (max-width: 1000px) {
+  .flex {
+    flex-direction: column;
+    align-items: center;
+    max-width: 95vw;
+  }
+
+  .left,
+  .right {
+    height: auto;
+    width: 90vw;
+    margin: 0;
+  }
+
+  .stuff {
+    max-width: 100vw;
+    margin: auto;
+  }
+
+  button,
+  select {
+    width: 90vw;
+    margin: 3px;
+  }
+  .stuff > h1 {
+    margin-bottom: 1em;
+    font-size: 2em;
+    font-weight: 100;
+  }
+}
