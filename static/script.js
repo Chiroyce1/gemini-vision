@@ -24,9 +24,9 @@ navigator.mediaDevices
   })
   .catch((error) => {
     console.error("Error enumerating devices:", error);
+    responseElement.innerText =
+      "Error getting MediaDevices: " + error.toString();
   });
-
-cameraSelect.addEventListener("change", setCamera);
 
 function setCamera() {
   const selectedCameraId = cameraSelect.value;
@@ -62,6 +62,7 @@ async function captureImage() {
   } catch (e) {
     console.error(e);
     responseElement.innerText = `Oops something went wrong on our end. Please try again later.\nError: ${e.toString()}`;
+    return;
   }
   if (res.status !== 200) {
     responseElement.innerText = await res.text();
@@ -86,3 +87,4 @@ function dataURItoBlob(dataURI) {
 }
 
 setCamera();
+cameraSelect.addEventListener("change", setCamera);
