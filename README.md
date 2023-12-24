@@ -2,27 +2,15 @@
 
 A demo of Google's latest vision based AI model, [gemini-pro-vision](https://deepmind.google/technologies/gemini/).
 
-### Get Started
-```bash
-git clone https://github.com/Chiroyce1/gemini-vision.git
-cd gemini-vision
-touch .env
-pip install -r requirements.txt
-python3 main.py  # Website runs on localhost:8080
-```
+**[TRY IT HERE!](https://chiroyce1.github.io/gemini-vision/)** (bring your own API key...)
 
-> Note, this will only work on only `https` or `localhost`, it will not work on `http`. This is due to [MediaDevices](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices) requiring secure contexts.
 
-### API_KEY
-You can obtain a free API key for `gemini-vision-pro` from [Google AI Studio](https://ai.google.dev/), then add it to your `.env` file, here is an examle
-```bash
-API_KEY="your_api_key_here"
-```
+## API Key
+You can obtain a free API key for `gemini-vision-pro` from [Google AI Studio](https://ai.google.dev/), then paste it into the `API_KEY` password input field. Don't worry it won't be saved or sent anywhere, except along with the requests to Google's server running Gemini.
 
-## Public Instance?
-No, run it yourself. Or use [codespaces](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=734611556)! 
+## Server Side Request
+Use the [`server`](https://github.com/Chiroyce1/gemini-vision/tree/server) branch to run a flask server with an API_KEY stored in `.env`, so that users can use it without having to bring their own key. Documentation in the `README.md` of that branch. 
 
 ## Extra
 - Yes the UI is wonky, it was just plain HTML yesterday but I decided to make it a bit ✨ pretty ✨ so it looks presentable, feel free to make pull requests for UI improvements.
-- Rate limiting is there just in case you deploy a public instance and some bad actor finds it, I think it is 60 requests a second from Google's side, not sure about the quota, so better be on the safe side.
 - Any bugs/issues with a specific browser/OS or in general, make an issue [here](https://github.com/Chiroyce1/gemini-vision/issues).
