@@ -1,23 +1,44 @@
 * {
-  font-weight: 100;
+  font-weight: 300;
   font-family: system-ui;
+  --primary: #588fec;
+  --bg: #1b1b1b;
+  --text: #ffffff;
+  --thickness: 1px;
 }
 
-body,
+@media (prefers-color-scheme: light) {
+  * {
+    --primary: #588fec;
+    --text: #1b1b1b;
+    --bg: #ffffff;
+  }
+
+  button:hover,
+  select:hover {
+    color: var(--bg);
+  }
+
+  img {
+    background-color: black;
+    border-radius: 50%;
+  }
+}
+
 html {
   margin: 0;
   padding: 0;
-  background-color: black;
-  color: white;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 select {
-  background-color: black;
-  color: white;
+  background-color: var(--bg);
+  color: var(--text);
   cursor: pointer;
   text-align: center;
   padding: 1em 2em;
-  border: 1px solid purple;
+  border: 1px solid var(--primary);
   border-radius: 4px;
   font-size: 1em;
   width: 100%;
@@ -42,9 +63,9 @@ video {
 
 textarea {
   height: 200px;
-  background-color: black;
-  color: white;
-  border: 1px solid white;
+  background-color: var(--bg);
+  color: var(--text);
+  border: var(--thickness) solid var(--primary);
   padding: 0.5em;
   border-radius: 3px;
 }
@@ -61,9 +82,9 @@ button {
   margin-top: 1em;
   width: 100%;
   padding: 1em 2em;
-  background-color: black;
-  color: white;
-  border: 1px solid purple;
+  background-color: var(--bg);
+  color: var(--text);
+  border: var(--thickness) solid var(--primary);
   border-radius: 4px;
   font-size: 1em;
 }
@@ -87,14 +108,14 @@ video {
 
 button:hover,
 select:hover {
-  background-color: purple;
+  background-color: var(--primary);
   transition: all 200ms;
 }
 
 input[type="password"] {
-  background-color: black;
-  color: white;
-  border: 1px solid white;
+  background-color: var(--bg);
+  color: var(--text);
+  border: var(--thickness) solid var(--primary);
   padding: 0.5em;
   margin-bottom: 3px;
   border-radius: 3px;
@@ -131,7 +152,7 @@ input[type="password"] {
   button,
   select {
     width: 90vw;
-    margin: 3px;
+    margin-bottom: 3px;
   }
   .stuff > h1 {
     margin-bottom: 1em;
