@@ -100,6 +100,15 @@ input[type="password"] {
   border-radius: 3px;
 }
 
+#github {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 42px;
+  margin: 1em;
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 1000px) {
   .flex {
     flex-direction: column;
