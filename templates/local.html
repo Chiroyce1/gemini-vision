@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/static/style.css">
+	<script type="importmap">
+		      {
+		        "imports": {
+		          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+		        }
+		      }
+	</script>
+
+	<title>Gemini Pro Vision Demo</title>
+</head>
+
+<body>
+	<div class="stuff">
+		<h1>Gemini Pro Vision</h1>
+		<div class="flex">
+			<div class="left">
+				<video id="webcam" autoplay></video>
+			</div>
+			<div class="right">
+				<select id="cameraSelect"></select><br>
+				<input type="password" id="api" placeholder="API_KEY">
+				<textarea id="prompt" placeholder="Enter prompt here" rows="4" cols="40"></textarea><br>
+				<button>Analyze Image</button>
+			</div>
+		</div>
+		<br>
+		<canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+		<p id="response"></p>
+
+	</div>
+</body>
+
+<script src="/static/local.js" type="module"></script>
+
+</html>

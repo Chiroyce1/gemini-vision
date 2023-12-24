@@ -25,6 +25,11 @@ def index():
     return render_template("index.html")
 
 
+@app.get('/local')
+def local():
+    return render_template("local.html")
+
+
 @app.post('/upload')
 @limiter.limit("5/minute")
 def upload():
