@@ -1,5 +1,0 @@
-google-generativeai>=0.3.2 
-python-dotenv>=1.0.0
-Flask>=3.0.0
-Pillow>=10.1.0
-Flask-Limiter>=3.5.0
