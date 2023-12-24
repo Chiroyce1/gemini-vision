@@ -6,6 +6,7 @@ A demo of Google's latest vision based AI model, [gemini-pro-vision](https://dee
 ```bash
 git clone https://github.com/Chiroyce1/gemini-vision.git
 cd gemini-vision
+git checkout server
 touch .env
 pip install -r requirements.txt
 python3 main.py  # Website runs on localhost:8080
