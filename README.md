@@ -13,14 +13,13 @@ python3 main.py  # Website runs on localhost:8080
 
 > Note, this will only work on only `https` or `localhost`, it will not work on `http`. This is due to [MediaDevices](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices) requiring secure contexts.
 
-### API_KEY
+## API_KEY
 You can obtain a free API key for `gemini-vision-pro` from [Google AI Studio](https://ai.google.dev/), then add it to your `.env` file, here is an examle
 ```bash
 API_KEY="your_api_key_here"
 ```
-
-## Public Instance?
-No, run it yourself. Or use [codespaces](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=734611556)! 
+## Local
+`localhost:8080/local` will let users add their own API_KEY to communicate with Google's servers running Gemini Pro, bypassing the flask server. For a purely local experience just use the [static branch](https://github.com/Chiroyce1/gemini-vision).
 
 ## Extra
 - Yes the UI is wonky, it was just plain HTML yesterday but I decided to make it a bit ✨ pretty ✨ so it looks presentable, feel free to make pull requests for UI improvements.
