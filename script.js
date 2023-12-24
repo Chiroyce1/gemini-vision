@@ -60,7 +60,6 @@ function setCamera() {
 
 async function captureImage() {
   if (active) return;
-  active = true;
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
   const imageDataURL = canvas.toDataURL("image/jpeg");
   const imageFile = new File([dataURItoBlob(imageDataURL)], "image.jpg", {
@@ -70,6 +69,7 @@ async function captureImage() {
   const API_KEY = document.querySelector("#api").value;
   if (API_KEY.trim() === "") {
     show("Please provide an API_KEY.");
+    return;
   }
   // Top class error handling
   let genAI;
@@ -82,6 +82,7 @@ async function captureImage() {
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
   show("Loading... (this can take upto 30s)");
   let res;
+  active = true;
   try {
     res = await model.generateContentStream([prompt, image]);
     let text = "";
@@ -92,6 +93,7 @@ async function captureImage() {
   } catch (e) {
     console.error(e);
     show(`Oops something went wrong.\nError: ${e.toString()}`);
+    active = false;
     return;
   }
 
