@@ -62,12 +62,14 @@ video {
 }
 
 textarea {
-  height: 200px;
+  height: 312px;
   background-color: var(--bg);
   color: var(--text);
   border: var(--thickness) solid var(--primary);
   padding: 0.5em;
   border-radius: 3px;
+  font-size: 1.2em;
+  margin-bottom: 10px;
 }
 
 .right {
@@ -86,7 +88,7 @@ button {
   color: var(--text);
   border: var(--thickness) solid var(--primary);
   border-radius: 4px;
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .left {
@@ -152,7 +154,7 @@ input[type="password"] {
   button,
   select {
     width: 90vw;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
   }
   .stuff > h1 {
     margin-bottom: 1em;
