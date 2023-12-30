@@ -84,7 +84,7 @@ async function captureImage() {
   let res;
   active = true;
   try {
-    res = await model.generateContentStream([prompt, image]);
+    res = await model.generateContentStream([promptInput.value, image]);
     let text = "";
     for await (const chunk of res.stream) {
       text += chunk.text();
