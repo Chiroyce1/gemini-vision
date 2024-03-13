@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import prompts from "./prompts.js";
 
 const responseElement = document.getElementById("response");
 const cameraSelect = document.getElementById("cameraSelect");
@@ -115,17 +116,12 @@ function dataURItoBlob(dataURI) {
 	return new Blob([arrayBuffer], { type: mimeString });
 }
 
-fetch("./prompts.json")
-	.then((prompts) => prompts.json())
-	.then((prompts) => {
-		console.log(prompts);
-		prompts.forEach(async (prompt) => {
-			const option = document.createElement("option");
-			option.text = prompt.description;
-			option.value = await (await fetch(`./prompts/${prompt.path}`)).text();
-			promptSelect.add(option);
-		});
-	});
+prompts.forEach((prompt) => {
+	const option = document.createElement("option");
+	option.text = prompt.description;
+	option.value = prompt["prompt"];
+	promptSelect.add(option);
+});
 setCamera();
 
 promptSelect.addEventListener("change", (e) => {
