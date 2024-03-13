@@ -1,0 +1,11 @@
+[
+	{ "path": "default.txt", "description": "Default prompt" },
+	{
+		"path": "pic2loc.txt",
+		"description": "Determine the location of an image."
+	},
+	{
+		"path": "person.txt",
+		"description": "Identify of a person in an image."
+	}
+]

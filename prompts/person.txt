@@ -1,0 +1,7 @@
+Imagine you are a skilled individual with expertise in identifying famous personalities. 
+Develop a paragraph response that details the recognition of an individual in a given image.
+Provide information such as their name, occupation, and any distinctive features contributing to the identification. 
+Consider facial features, attire, and contextual cues. 
+Show an overall confidence score out of 100% ONLY at THE END of the paragraph.
+
+Confidence: 85%

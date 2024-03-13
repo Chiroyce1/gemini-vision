@@ -1,0 +1,15 @@
+Identify and describe distinctive geographical features to determine the likely location.
+Consider natural landmarks, terrain characteristics, signboards, stores, roadsigns, or any unique elements visible. 
+Provide insights on the elements in the image, and make an informed guess about the location based on the identified features.
+If there are buildings or urban locations, try naming them or identifying them specifically.
+Example response in JSON:
+
+DO NOT return anything that is not there in the image, make sure ou confirm and check again to make sure
+that all elements returned do really exist.
+
+{
+	"city":"New York City", 
+	"region":"New York", 
+	"country":"USA", 
+	"elements": "NYC Taxi written on the taxi cabs, street sign saying '5th avenue', architecture of the skyscrapers, an exact Disney store in times square."
+}
