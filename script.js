@@ -92,6 +92,9 @@ async function captureImage() {
 			text += chunk.text();
 			show(text);
 		}
+		if (document.querySelector("#speech").checked) {
+			speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+		}
 	} catch (e) {
 		console.error(e);
 		show(`Oops something went wrong.\nError: ${e.toString()}`);

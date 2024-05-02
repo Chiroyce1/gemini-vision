@@ -62,7 +62,7 @@ video {
 }
 
 textarea {
-	height: 260px;
+	height: 280px;
 	background-color: var(--bg);
 	color: var(--text);
 	border: var(--thickness) solid var(--primary);
@@ -161,4 +161,16 @@ input[type="password"] {
 		font-size: 2em;
 		font-weight: 100;
 	}
+
+	textarea {
+		height: 200px;
+	}
+}
+
+.speech-checkbox {
+	margin-top: 0.5em;
+}
+
+.speech-checkbox > input {
+	cursor: pointer;
 }
