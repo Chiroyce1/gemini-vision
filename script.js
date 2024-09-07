@@ -47,6 +47,10 @@ cameraSelect.addEventListener("change", setCamera);
 
 function setCamera() {
 	const selectedCameraId = cameraSelect.value;
+	// disable all other media streams
+	if (video.srcObject) {
+		video.srcObject.getTracks().forEach((track) => track.stop());
+	}
 	navigator.mediaDevices
 		.getUserMedia({
 			video: { deviceId: selectedCameraId },
@@ -81,8 +85,8 @@ async function captureImage() {
 		show(`Oops something went wrong.\nError: ${e}`);
 	}
 
-	const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
-	show("Loading... (this can take upto 30s)");
+	const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+	show("Loading... ");
 	let res;
 	active = true;
 	try {
