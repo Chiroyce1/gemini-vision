@@ -5,11 +5,13 @@ const responseElement = document.getElementById("response");
 const cameraSelect = document.getElementById("cameraSelect");
 const promptSelect = document.getElementById("promptSelect");
 const voiceSelect = document.getElementById("voiceSelect");
+const voiceCheckbox = document.getElementById("speech");
 const promptInput = document.getElementById("prompt");
 const video = document.getElementById("webcam");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 let active = false;
+let output = "";
 let voice = null;
 
 promptInput.value = `What do you see in this picture? Describe in detail, along with reasoning.`;
@@ -27,6 +29,15 @@ async function fileToGenerativePart(file) {
 	};
 }
 
+function speak(txt) {
+	const utterance = new SpeechSynthesisUtterance(txt);
+	if (voice) {
+		utterance.voice = speechSynthesis.getVoices()[voice + 1];
+	}
+	document.querySelector("#speechtext").innerText = "Stop Speaking";
+	speechSynthesis.speak(utterance);
+}
+
 document.querySelector("#hide").checked = false;
 document.querySelector("#hide").addEventListener("click", () => {
 	const state = document.querySelector("#hide").checked;
@@ -34,6 +45,17 @@ document.querySelector("#hide").addEventListener("click", () => {
 		document.querySelector("#settings").style.display = "none";
 	} else {
 		document.querySelector("#settings").style.display = "";
+	}
+});
+
+voiceCheckbox.addEventListener("click", () => {
+	if (!voiceCheckbox.checked) {
+		speechSynthesis.cancel();
+		document.querySelector("#speechtext").innerText = "Speak output";
+	} else {
+		if (output.trim() !== "") {
+			speak(output);
+		}
 	}
 });
 
@@ -108,12 +130,9 @@ async function captureImage() {
 			text += chunk.text();
 			show(text);
 		}
+		output = text;
 		if (document.querySelector("#speech").checked) {
-			const utterance = new SpeechSynthesisUtterance(text);
-			if (voice) {
-				utterance.voice = speechSynthesis.getVoices()[voice + 1];
-			}
-			speechSynthesis.speak(utterance);
+			speak(text);
 		}
 	} catch (e) {
 		console.error(e);
@@ -147,12 +166,10 @@ prompts.forEach((prompt) => {
 });
 
 speechSynthesis.getVoices().forEach((voice) => {
-	if (navigator.languages.includes(voice.lang)) {
-		const option = document.createElement("option");
-		option.value = voice.name;
-		option.text = voice.name;
-		voiceSelect.add(option);
-	}
+	const option = document.createElement("option");
+	option.value = voice.name;
+	option.text = voice.name;
+	voiceSelect.add(option);
 });
 
 setCamera();
