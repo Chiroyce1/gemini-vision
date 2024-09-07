@@ -160,6 +160,9 @@ input[type="password"] {
 
 .speech-checkbox {
 	margin-top: 0.5em;
+	display: flex;
+	gap: 1;
+	justify-content: space-between;
 }
 
 .speech-checkbox > input {

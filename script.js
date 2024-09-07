@@ -4,11 +4,13 @@ import prompts from "./prompts.js";
 const responseElement = document.getElementById("response");
 const cameraSelect = document.getElementById("cameraSelect");
 const promptSelect = document.getElementById("promptSelect");
+const voiceSelect = document.getElementById("voiceSelect");
 const promptInput = document.getElementById("prompt");
 const video = document.getElementById("webcam");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 let active = false;
+let voice = 0;
 
 promptInput.value = `What do you see in this picture? Describe in detail, along with reasoning.`;
 
@@ -24,6 +26,16 @@ async function fileToGenerativePart(file) {
 		inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
 	};
 }
+
+document.querySelector("#hide").checked = false;
+document.querySelector("#hide").addEventListener("click", () => {
+	const state = document.querySelector("#hide").checked;
+	if (state) {
+		document.querySelector("#settings").style.display = "none";
+	} else {
+		document.querySelector("#settings").style.display = "";
+	}
+});
 
 navigator.mediaDevices
 	.enumerateDevices()
@@ -97,7 +109,9 @@ async function captureImage() {
 			show(text);
 		}
 		if (document.querySelector("#speech").checked) {
-			speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+			const utterance = new SpeechSynthesisUtterance(text);
+			utterance.voice = speechSynthesis.getVoices()[voice];
+			speechSynthesis.speak(utterance);
 		}
 	} catch (e) {
 		console.error(e);
@@ -129,9 +143,24 @@ prompts.forEach((prompt) => {
 	option.value = prompt["prompt"];
 	promptSelect.add(option);
 });
+
+speechSynthesis.getVoices().forEach((voice) => {
+	if (navigator.languages.includes(voice.lang)) {
+		const option = document.createElement("option");
+		option.value = voice.name;
+		option.text = voice.name;
+		voiceSelect.add(option);
+	}
+});
+
 setCamera();
 
 promptSelect.addEventListener("change", (e) => {
 	document.querySelector("#prompt").value = promptSelect.value;
 });
+
+voiceSelect.addEventListener("change", (e) => {
+	voice = voiceSelect.selectedIndex;
+});
+
 document.querySelector("button").addEventListener("click", captureImage);

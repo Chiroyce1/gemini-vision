@@ -34,6 +34,15 @@ Show an overall confidence score out of 100% ONLY at THE END of the paragraph.
 
 Confidence: 85%`,
 	},
-	// Add prompts below this
-	// {"description":"Describe your prompt", "prompt":"Your prompt goes here"}
+
+	{
+		description: "Identify a car in the frame.",
+		prompt: `Imagine you are a skilled individual with expertise in identifying car models.
+Develop a one sentence response that details the recognition of a car in a given image.
+Example: Make, Model, Year, Color, and any other distinctive features.
+Then in a paragraph, provide information such as the car's make, model, year, and any distinctive features contributing to the identification.
+Consider the car's body shape, headlights, taillights, and any other unique elements.
+Show an overall confidence score out of 100% ONLY at THE END of the paragraph.
+`,
+	},
 ];
