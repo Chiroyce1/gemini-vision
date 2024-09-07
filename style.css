@@ -47,11 +47,12 @@ select {
 
 video {
 	border-radius: 4px;
+	margin-bottom: 1em;
 }
 
 .stuff {
 	margin: auto;
-	width: 70vw;
+	width: 75vw;
 }
 
 .stuff > h1 {
@@ -62,7 +63,7 @@ video {
 }
 
 textarea {
-	height: 280px;
+	height: 260px;
 	background-color: var(--bg);
 	color: var(--text);
 	border: var(--thickness) solid var(--primary);
@@ -81,7 +82,6 @@ textarea {
 
 button {
 	cursor: pointer;
-	margin-top: 1em;
 	width: 100%;
 	padding: 1em 2em;
 	background-color: var(--bg);
@@ -124,6 +124,16 @@ input[type="password"] {
 }
 
 @media only screen and (max-width: 1000px) {
+	.stuff {
+		width: 90vw;
+	}
+
+	textarea {
+		height: 50px;
+	}
+}
+
+@media only screen and (max-width: 1000px) {
 	.flex {
 		flex-direction: column;
 		align-items: center;
@@ -154,7 +164,7 @@ input[type="password"] {
 	}
 
 	textarea {
-		height: 200px;
+		height: 50px;
 	}
 }
 

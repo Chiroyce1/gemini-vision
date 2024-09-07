@@ -10,7 +10,7 @@ const video = document.getElementById("webcam");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 let active = false;
-let voice = 0;
+let voice = null;
 
 promptInput.value = `What do you see in this picture? Describe in detail, along with reasoning.`;
 
@@ -110,7 +110,9 @@ async function captureImage() {
 		}
 		if (document.querySelector("#speech").checked) {
 			const utterance = new SpeechSynthesisUtterance(text);
-			utterance.voice = speechSynthesis.getVoices()[voice];
+			if (voice) {
+				utterance.voice = speechSynthesis.getVoices()[voice + 1];
+			}
 			speechSynthesis.speak(utterance);
 		}
 	} catch (e) {

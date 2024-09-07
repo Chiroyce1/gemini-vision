@@ -28,12 +28,14 @@
         <input type="password" id="api" placeholder="Enter API key (get it from ai.google.dev)">
         <textarea id="prompt" placeholder="Enter prompt here" rows="4" cols="40"></textarea><br>
         <select id="promptSelect"></select><br>
-        <select id="cameraSelect"></select><br>
-        <select id="voiceSelect"></select><br>
+        <select id="voiceSelect">
+          <option value="default">Default voice</option>
+        </select><br>
       </div>
       <div class="left">
         <video id="webcam" autoplay></video>
-        <button>Analyze Image</button>
+        <select id="cameraSelect"></select>
+        <button>Take picture 📸</button>
         <div class="speech-checkbox">
           <div>
             <input type="checkbox" id="speech">
