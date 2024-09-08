@@ -1,6 +1,27 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import prompts from "./prompts.js";
 
+import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+
+const safetySettings = [
+	{
+		category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+	{
+		category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+	{
+		category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+	{
+		category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+];
+
 const responseElement = document.getElementById("response");
 const cameraSelect = document.getElementById("cameraSelect");
 const promptSelect = document.getElementById("promptSelect");
@@ -119,7 +140,10 @@ async function captureImage() {
 		show(`Oops something went wrong.\nError: ${e}`);
 	}
 
-	const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+	const model = genAI.getGenerativeModel({
+		model: "gemini-1.5-flash",
+		safetySettings,
+	});
 	show("Loading... ");
 	let res;
 	active = true;

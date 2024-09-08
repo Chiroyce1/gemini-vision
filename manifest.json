@@ -1,0 +1,15 @@
+{
+	"name": "Gemini Vision",
+	"short_name": "Gemini",
+	"display": "standalone",
+	"start_url": "./",
+	"icons": [
+		{
+			"src": "./images/gemini.png",
+			"type": "image/x-png",
+			"sizes": "500x500"
+		}
+	],
+	"background_color": "#588fec",
+	"theme_color": "#588fec"
+}
