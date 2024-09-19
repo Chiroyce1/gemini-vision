@@ -1,4 +1,6 @@
-export default [
+import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+
+export const prompts = [
 	{
 		description: "Default prompt",
 		prompt: `What do you see in this picture? Describe in detail, along with reasoning.`,
@@ -44,5 +46,24 @@ Then in a paragraph, provide information such as the car's make, model, year, an
 Consider the car's body shape, headlights, taillights, and any other unique elements.
 Show an overall confidence score out of 100% ONLY at THE END of the paragraph.
 `,
+	},
+];
+
+export const safetySettings = [
+	{
+		category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+	{
+		category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+	{
+		category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
+	},
+	{
+		category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+		threshold: HarmBlockThreshold.BLOCK_NONE,
 	},
 ];
