@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="../images/gemini.png" type="image/png">
+	<meta name="description" content="A demo of Google's latest multimodal AI, gemini-1.5-flash">
+	<link rel="manifest" href="../manifest.json">
+	<meta name="keywords"
+		content="google, gemini, image-analysis, gemini-flash, google-ai, gpt, chatgpt, ai, llm, gemini-demo, chiroyce">
+	<link rel="stylesheet" href="/live/live.css">
+	<script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+    </script>
+
+	<title>Gemini Vision</title>
+</head>
+
+<body>
+	<canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+	<video id="webcam" autoplay></video>
+	<p id="response"></p>
+	<div class="settings">
+		<select id="voiceSelect">
+			<option value="default">Default voice</option>
+		</select>
+		<select id="promptSelect">
+		</select>
+		<select id="cameraSelect"></select>
+		<button id="state">Stop</button>
+	</div>
+
+	<span class="loader"></span>
+</body>
+
+<script src="/live/live.js" type="module"></script>
+
+</html>

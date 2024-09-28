@@ -1,33 +1,19 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { prompts, safetySettings } from "./prompts.js";
+import { safetySettings, prompts } from "/live/prompts.js";
 
-/* ======================================================================================== */
-// DOM and state management setup
-/* ======================================================================================== */
-
-const responseElement = document.getElementById("response");
-const cameraSelect = document.getElementById("cameraSelect");
-const promptSelect = document.getElementById("promptSelect");
-const speakBtn = document.getElementById("speak");
-const voiceSelect = document.getElementById("voiceSelect");
-const promptInput = document.getElementById("prompt");
 const video = document.getElementById("webcam");
+const responseElement = document.getElementById("response");
 const canvas = document.getElementById("canvas");
+const promptSelect = document.querySelector("#promptSelect");
 const context = canvas.getContext("2d");
+const loader = document.querySelector(".loader");
+loader.style.display = "none";
+let enabled = false;
 
-let active = false; // is the model currently generating a response
-let output = ""; // last output
-let speaking = false; // is the speechsynthesis currently speaking
-
-speakBtn.style.display = "none";
-promptInput.value = `What do you see in this picture? Describe in detail, along with reasoning.`;
-
-const show = (text) => (responseElement.innerText = text);
 promptSelect.addEventListener("change", (e) => {
 	document.querySelector("#prompt").value = promptSelect.value;
 });
 
-document.querySelector("#click").addEventListener("click", captureImage);
 prompts.forEach((prompt) => {
 	const option = document.createElement("option");
 	option.text = prompt.description;
@@ -35,25 +21,62 @@ prompts.forEach((prompt) => {
 	promptSelect.add(option);
 });
 
-document.querySelector("#hide").checked = false;
-document.querySelector("#hide").addEventListener("click", () => {
-	const state = document.querySelector("#hide").checked;
-	if (state) {
-		document.querySelector("#settings").style.display = "none";
+const stateBtn = document.getElementById("state");
+stateBtn.innerText = enabled ? "Stop" : "Start";
+stateBtn.className = enabled ? "red" : "green";
+stateBtn.addEventListener("click", () => {
+	if (enabled) {
+		enabled = false;
+		speak();
 	} else {
-		document.querySelector("#settings").style.display = "";
+		enabled = true;
 	}
+	stateBtn.className = enabled ? "red" : "green";
+	stateBtn.innerText = enabled ? "Stop" : "Start";
 });
 
-speakBtn.addEventListener("click", () => {
-	if (speaking) {
-		speechSynthesis.cancel();
-		speakBtn.innerText = "Speak";
-		speaking = false;
-	} else if (output.trim() !== "") {
-		speak(output);
-	}
-});
+const show = (text) =>
+	(responseElement.innerText = `${responseElement.innerText}\n${text}`);
+
+// Top class error handling
+let API_KEY = null;
+
+if (localStorage.getItem("API_KEY")) {
+	API_KEY = localStorage.getItem("API_KEY");
+	setTimeout(() => {
+		setInterval(captureImage, 2000);
+	}, 2000); // wait for camera to load
+} else {
+	alert("Please provide an API_KEY.");
+	location.href = "/";
+}
+
+let genAI;
+let chat;
+let model;
+try {
+	genAI = new GoogleGenerativeAI(API_KEY);
+	model = genAI.getGenerativeModel({
+		model: "gemini-1.5-flash",
+		safetySettings,
+	});
+	chat = model.startChat();
+} catch (e) {
+	show(`Oops something went wrong.\nError: ${e}`);
+}
+
+let active = false; // is the model currently generating a response
+let output = ""; // last output
+let speaking = false; // is the speechsynthesis currently speaking
+
+function onResize() {
+	video.width = window.innerWidth;
+	video.height = window.innerHeight - 50;
+	video.style.width = `${window.innerWidth}px`;
+}
+
+onResize();
+window.addEventListener("resize", onResize);
 
 /* ======================================================================================== */
 // Generative AI invocation and response handling with speech synthesis
@@ -71,63 +94,62 @@ function speak(txt) {
 	} else {
 		console.log("Using default voice");
 	}
-	speakBtn.innerText = "Stop Speaking";
-	speakBtn.style.display = "";
 	speechSynthesis.speak(utterance);
 	utterance.addEventListener("end", () => {
-		speakBtn.innerText = "Speak";
 		speaking = false;
 	});
 }
 
 async function captureImage() {
+	console.log(`ENABLED: ${enabled}, ACTIVE: ${active}, SPEAKING: ${speaking}`);
+	if (!enabled) return;
 	if (active) return;
+	if (speaking) return;
+	loader.style.display = "block";
 	context.drawImage(video, 0, 0, canvas.width, canvas.height);
 	const imageDataURL = canvas.toDataURL("image/jpeg");
 	const imageFile = new File([dataURItoBlob(imageDataURL)], "image.jpg", {
 		type: "image/jpeg",
 	});
+	// open the blob in a new tab
+	// const url = URL.createObjectURL(dataURItoBlob(imageDataURL));
+	// window.open(url, "_blank");
 	const image = await fileToGenerativePart(imageFile);
-	const API_KEY = document.querySelector("#api").value;
 	if (API_KEY.trim() === "") {
 		show("Please provide an API_KEY.");
+		location.href = "/";
 		return;
 	}
-	localStorage.setItem("API_KEY", API_KEY);
-	// Top class error handling
-	let genAI;
-	try {
-		genAI = new GoogleGenerativeAI(API_KEY);
-	} catch (e) {
-		show(`Oops something went wrong.\nError: ${e}`);
-	}
 
-	const model = genAI.getGenerativeModel({
-		model: "gemini-1.5-flash",
-		safetySettings,
-	});
-	show("Loading... ");
-	let res;
 	active = true;
-	speakBtn.style.display = "none";
 	try {
 		let start = Date.now();
-		res = await model.generateContentStream([promptInput.value, image]);
+		const data = promptSelect.value + output;
+		console.log(data);
+		const res = await chat.sendMessageStream([data, image]);
+		console.log(chat._history);
 		let text = "";
 		for await (const chunk of res.stream) {
 			text += chunk.text();
-			show(text);
 		}
-		output = text;
-		show(`${output} [${((Date.now() - start) / 1000).toFixed(1)}s]`);
-		speak(text);
+		loader.style.display = "none";
+		active = false;
+		output = text.replace(/\s+$/gm, ""); // remove trailing whitespace
+		console.log(`${output}[${((Date.now() - start) / 1000).toFixed(1)}s]`);
+		const simliar = output.includes("[SIMILAR]");
+		if (!simliar) {
+			show(output);
+			speak(text);
+		}
 	} catch (e) {
 		console.error(e);
 		show(`Oops something went wrong.\nError: ${e.toString()}`);
+		loader.style.display = "none";
 		active = false;
 		return;
 	}
 
+	loader.style.display = "none";
 	active = false;
 }
 
@@ -170,8 +192,8 @@ navigator.mediaDevices
 		});
 	})
 	.catch((error) => {
-		show(`Error enumerating devices: ${error}`);
-		console.error(`Error enumerating devices: ${error}`);
+		show(`Error getting camera devices: ${error}`);
+		console.error(`Error getting camera devices: ${error}`);
 	});
 
 cameraSelect.addEventListener("change", setCamera);
