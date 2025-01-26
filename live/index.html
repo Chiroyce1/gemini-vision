@@ -25,15 +25,21 @@
 	<canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
 	<video id="webcam" autoplay></video>
 	<p id="response"></p>
-	<div class="settings">
-		<select id="voiceSelect">
-			<option value="default">Default voice</option>
-		</select>
-		<select id="promptSelect">
-		</select>
-		<select id="cameraSelect"></select>
-		<button id="state">Stop</button>
+	<div class="fix">
+		<div class="settings">
+			<button id="screen">Screen 🖥️</button>
+			<select id="voiceSelect">
+				<option value="default">Default voice</option>
+			</select>
+			<select id="modelSelect">
+			</select>
+			<button id="cam">Camera 📷</button>
+			<select id="cameraSelect"></select>
+			<button id="state">Stop</button>
+		</div>
+		<textarea id="prompt"></textarea>
 	</div>
+
 
 	<span class="loader"></span>
 </body>

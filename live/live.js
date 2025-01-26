@@ -4,30 +4,78 @@ import { safetySettings, prompts } from "/live/prompts.js";
 const video = document.getElementById("webcam");
 const responseElement = document.getElementById("response");
 const canvas = document.getElementById("canvas");
-const promptSelect = document.querySelector("#promptSelect");
+const modelSelect = document.querySelector("#modelSelect");
 const context = canvas.getContext("2d");
 const loader = document.querySelector(".loader");
+const textarea = document.querySelector("#prompt");
+
+const models = [
+	"gemini-1.5-flash-8b",
+	"gemini-1.5-flash",
+	"gemini-2.0-flash-exp",
+	"gemini-1.5-pro",
+];
+
 loader.style.display = "none";
 let enabled = false;
 
-promptSelect.addEventListener("change", (e) => {
-	document.querySelector("#prompt").value = promptSelect.value;
+models.forEach((model) => {
+	const option = document.createElement("option");
+	option.text = model;
+	option.value = model;
+	modelSelect.add(option);
 });
 
-prompts.forEach((prompt) => {
-	const option = document.createElement("option");
-	option.text = prompt.description;
-	option.value = prompt["prompt"];
-	promptSelect.add(option);
-});
+document.querySelector(
+	"#prompt"
+).value = `Hey there! Can you describe what you see in the image?`;
+
+let model;
+let genAI;
+let chat;
 
 const stateBtn = document.getElementById("state");
 stateBtn.innerText = enabled ? "Stop" : "Start";
 stateBtn.className = enabled ? "red" : "green";
 stateBtn.addEventListener("click", () => {
+	if (!model) {
+		console.log("Creating model...");
+		try {
+			genAI = new GoogleGenerativeAI(API_KEY);
+			model = genAI.getGenerativeModel({
+				model: modelSelect.value,
+				safetySettings,
+			});
+			modelSelect.disabled = true;
+			modelSelect.title = "Please refresh the page to change the model.";
+			modelSelect.style.cursor = "not-allowed";
+			chat = model.startChat({
+				history: [
+					{
+						role: "user",
+						parts: [
+							{
+								text: `Keep all your responses less than 80 words, do not use markdown or emojis.`,
+							},
+						],
+					},
+					{
+						role: "model",
+						parts: [
+							{
+								text: "OK. I will keep my responses less than 80 words.",
+							},
+						],
+					},
+				],
+			});
+		} catch (e) {
+			show(`Oops something went wrong.\nError: ${e}`);
+		}
+	}
 	if (enabled) {
 		enabled = false;
-		speak();
+		speak("");
 	} else {
 		enabled = true;
 	}
@@ -35,8 +83,15 @@ stateBtn.addEventListener("click", () => {
 	stateBtn.innerText = enabled ? "Stop" : "Start";
 });
 
-const show = (text) =>
-	(responseElement.innerText = `${responseElement.innerText}\n${text}`);
+const show = (text) => {
+	// remove leading whitespace
+	text = text.replace(/^\s+/gm, "");
+	// remove trailing whitespace
+	text = text.replace(/\s+$/gm, "");
+
+	responseElement.innerText = `${responseElement.innerText}\n${text}`;
+	responseElement.scrollTop = responseElement.scrollHeight;
+};
 
 // Top class error handling
 let API_KEY = null;
@@ -51,22 +106,7 @@ if (localStorage.getItem("API_KEY")) {
 	location.href = "/";
 }
 
-let genAI;
-let chat;
-let model;
-try {
-	genAI = new GoogleGenerativeAI(API_KEY);
-	model = genAI.getGenerativeModel({
-		model: "gemini-1.5-flash",
-		safetySettings,
-	});
-	chat = model.startChat();
-} catch (e) {
-	show(`Oops something went wrong.\nError: ${e}`);
-}
-
 let active = false; // is the model currently generating a response
-let output = ""; // last output
 let speaking = false; // is the speechsynthesis currently speaking
 
 function onResize() {
@@ -89,10 +129,7 @@ function speak(txt) {
 	const utterance = new SpeechSynthesisUtterance(txt);
 	if (voiceSelect.selectedIndex !== 0) {
 		utterance.voice = voice;
-		console.log(voice);
 		localStorage.setItem("voice", voice.name);
-	} else {
-		console.log("Using default voice");
 	}
 	speechSynthesis.speak(utterance);
 	utterance.addEventListener("end", () => {
@@ -101,7 +138,6 @@ function speak(txt) {
 }
 
 async function captureImage() {
-	console.log(`ENABLED: ${enabled}, ACTIVE: ${active}, SPEAKING: ${speaking}`);
 	if (!enabled) return;
 	if (active) return;
 	if (speaking) return;
@@ -124,23 +160,16 @@ async function captureImage() {
 	active = true;
 	try {
 		let start = Date.now();
-		const data = promptSelect.value + output;
-		console.log(data);
-		const res = await chat.sendMessageStream([data, image]);
+		const data = textarea.value;
+		const res = await chat.sendMessage([data, image]);
 		console.log(chat._history);
-		let text = "";
-		for await (const chunk of res.stream) {
-			text += chunk.text();
-		}
+		let text = res.response.text();
 		loader.style.display = "none";
 		active = false;
-		output = text.replace(/\s+$/gm, ""); // remove trailing whitespace
-		console.log(`${output}[${((Date.now() - start) / 1000).toFixed(1)}s]`);
-		const simliar = output.includes("[SIMILAR]");
-		if (!simliar) {
-			show(output);
-			speak(text);
-		}
+		text = text.replace(/\s+$/gm, ""); // remove trailing whitespace
+		console.log(`${text}[${((Date.now() - start) / 1000).toFixed(1)}s]`);
+		show(text);
+		speak(text);
 	} catch (e) {
 		console.error(e);
 		show(`Oops something went wrong.\nError: ${e.toString()}`);
@@ -217,7 +246,30 @@ function setCamera() {
 		});
 }
 
-setCamera();
+async function setScreen() {
+	// disable all other media streams
+	if (video.srcObject) {
+		video.srcObject.getTracks().forEach((track) => track.stop());
+	}
+	try {
+		const stream = await navigator.mediaDevices.getDisplayMedia({
+			video: true,
+			audio: false,
+		});
+		video.srcObject = stream;
+	} catch (error) {
+		console.error(`Error accessing screen: ${error}`);
+		show(`Error accessing screen: ${error}`);
+	}
+}
+
+document.querySelector("#screen").addEventListener("click", () => {
+	setScreen();
+});
+
+document.querySelector("#cam").addEventListener("click", () => {
+	setCamera();
+});
 
 /* ======================================================================================== */
 // UTILITY FUNCTIONS for the Google Generative AI JS SDK

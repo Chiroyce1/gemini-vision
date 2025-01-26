@@ -4,7 +4,13 @@
 	--primary: #588fec;
 	--bg: #1b1b1b;
 	--text: #ffffff;
-	--thickness: 1px;
+	--thickness: 2px;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
 	margin: 0;
 	padding: 0;
 }
@@ -34,38 +40,6 @@ html {
 	color: var(--text);
 }
 
-.settings {
-	position: fixed;
-	left: 8px;
-	bottom: 8px;
-	display: flex;
-	gap: 2px;
-	justify-content: center;
-	align-items: center;
-}
-
-/* display width <600px make settings a 2x2 grid */
-@media only screen and (max-width: 600px) {
-	.settings {
-		display: grid;
-		width: 97vw;
-		margin: auto;
-		grid-template-columns: 1fr 1fr;
-	}
-}
-
-/* display width <600px make settings centered at the bottom */
-@media only screen and (min-width: 600px) {
-	.settings {
-		position: fixed;
-		left: 50%;
-		transform: translateX(-50%);
-		bottom: 8px;
-		width: 70vw;
-		gap: 0.5em;
-	}
-}
-
 .red,
 .red:hover {
 	background-color: #de3535;
@@ -84,7 +58,7 @@ select {
 	cursor: pointer;
 	text-align: center;
 	padding: 1em 1em;
-	border: 1px solid var(--primary);
+	border: 2px solid var(--primary);
 	border-radius: 4px;
 	font-size: 1em;
 	width: 100%;
@@ -105,17 +79,6 @@ video {
 	border-radius: 4px;
 	margin-bottom: 1em;
 	margin: auto;
-}
-
-#response {
-	position: fixed;
-	top: 0px;
-	left: 16px;
-	font-size: 1em;
-	width: 70vw;
-	font-weight: 300;
-	overflow-y: scroll;
-	max-height: 50vh;
 }
 
 /* for displays <500px */
@@ -227,4 +190,82 @@ img {
 	100% {
 		transform: rotate(360deg);
 	}
+}
+
+/* NEW */
+
+.fix {
+	position: fixed;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: rgba(0, 0, 0, 0.3);
+	max-width: max-content;
+	border-radius: 5px;
+	/* background filter */
+	backdrop-filter: blur(5px);
+	padding: 2em 1em;
+	display: flex;
+	gap: 0.5em;
+	margin-top: 1em;
+	align-items: center;
+	justify-content: center;
+	height: 100px;
+}
+
+textarea {
+	background-color: var(--bg);
+	color: var(--text);
+	border: var(--thickness) solid var(--primary);
+	border-radius: 3px;
+	width: 400px;
+	max-width: 95%;
+	height: 99%;
+	padding: 8px;
+}
+
+/* if screen width <600px, .fix should col flex */
+@media only screen and (max-width: 600px) {
+	.fix {
+		flex-direction: column;
+		height: 200px;
+	}
+
+	textarea {
+		height: 100px;
+		width: 100%;
+	}
+}
+
+.settings {
+	display: grid;
+	/* 3x2 grid */
+	grid-template-columns: 1fr 1fr 1fr;
+	/* grid-template-columns: 1fr 1fr; */
+	gap: 0.5em;
+}
+
+/* width <600px */
+@media only screen and (max-width: 600px) {
+	.settings {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.settings > * {
+	width: 190px;
+}
+
+#response {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	font-size: 1em;
+	width: 70vw;
+	font-weight: 300;
+	overflow-y: scroll;
+	max-height: 40vh;
+	background-color: rgba(0, 0, 0, 0.6);
+	padding: 1em;
+	border-radius: 5px;
 }
