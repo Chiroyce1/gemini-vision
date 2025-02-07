@@ -9,12 +9,7 @@ const context = canvas.getContext("2d");
 const loader = document.querySelector(".loader");
 const textarea = document.querySelector("#prompt");
 
-const models = [
-	"gemini-1.5-flash-8b",
-	"gemini-1.5-flash",
-	"gemini-2.0-flash-exp",
-	"gemini-1.5-pro",
-];
+const models = ["gemini-2.0-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro"];
 
 loader.style.display = "none";
 let enabled = false;
